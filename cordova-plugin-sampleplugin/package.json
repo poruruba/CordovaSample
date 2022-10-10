@@ -1,0 +1,11 @@
+{
+  "name": "cordova-plugin-sampleplugin",
+  "version": "0.0.1",
+  "cordova": {
+    "id": "cordova-plugin-sampleplugin",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  }
+}

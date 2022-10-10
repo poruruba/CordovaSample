@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="cordova-plugin-sampleplugin" version="0.0.1">
+    <name>SamplePlugin</name>
+    <js-module src="www/plugin_sampleplugin.js" name="sampleplugin">
+        <clobbers target="sampleplugin" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="SamplePlugin" >
+                <param name="android-package" value="jp.or.sample.SamplePlugin.Main"/>
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.NFC" />
+        </config-file>
+        <source-file src="src/android/jp/or/sample/SamplePlugin/Main.java" target-dir="src/jp/or/sample/SamplePlugin" />
+    </platform>
+    <platform name="ios">
+        <dependency id="cordova-plugin-add-swift-support" version="2.0.2"/>
+        <config-file target="config.xml" parent="/*">
+            <feature name="SamplePlugin" >
+                <param name="ios-package" value="SamplePlugin"/>
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NFCReaderUsageDescription">
+            <string>NFC Scanning</string>
+        </config-file>
+        <source-file src="src/ios/SamplePlugin.swift" target-dir="src/ios" />
+    </platform>
+</plugin>
