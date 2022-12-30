@@ -29,6 +29,18 @@ class SamplePlugin{
 				[return_type]);
 		});
 	}
+
+	func3(enable, callback){
+		cordova.exec(
+			function(result){
+				callback(result);
+			},
+			function(err){
+				console.error("func3 call failed");
+			},
+			"SamplePlugin", "func3",
+			[enable]);
+	}
 }
 
 module.exports = new SamplePlugin();
