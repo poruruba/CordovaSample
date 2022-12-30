@@ -7,6 +7,7 @@ import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 public class Main extends CordovaPlugin {
 	public static String TAG = "SamplePlugin.Main";
 	private Activity activity;
+	private CallbackContext callback;
 
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView)
@@ -45,6 +47,13 @@ public class Main extends CordovaPlugin {
 		super.onNewIntent(intent);
 	}
 
+	private void sendMessageToJs(JSONObject message, CallbackContext callback) {
+		final PluginResult result = new PluginResult(PluginResult.Status.OK, message);
+		result.setKeepCallback(true);
+		if( callback != null )
+			callback.sendPluginResult(result);
+	}
+	
 	@Override
 	public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException
 	{
@@ -66,6 +75,8 @@ public class Main extends CordovaPlugin {
 			result.put("arg1", arg1);
 			result.put("arg2", output_array);
 			callbackContext.success(result);
+			
+			sendMessageToJs(result, callback);
 		}else
 		if( action.equals("func2") ){
 			String arg0 = args.getString(0);
@@ -83,6 +94,15 @@ public class Main extends CordovaPlugin {
 			}else{
 				callbackContext.error("Unknown arg0");
 				return false;
+			}
+		}else
+		if( action.equals("func3") ){
+			boolean arg0 = args.getBoolean(0);
+			if( arg0 ){
+				callback = callbackContext;
+			}else{
+				callback = null;
+				callbackContext.success("OK");
 			}
 		}else {
 			String message = "Unknown action : (" + action + ") " + args.getString(0);
