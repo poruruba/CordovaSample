@@ -3,6 +3,8 @@ import Foundation
 @objc(SamplePlugin)
 class SamplePlugin : CDVPlugin
 {
+    var callbackId: String?
+    
     override
     func pluginInitialize() {
     }
@@ -20,6 +22,12 @@ class SamplePlugin : CDVPlugin
 
         let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["arg0": arg0, "arg1": arg1, "arg2": arg2] )
         commandDelegate.send(pluginResult, callbackId: command.callbackId)
+
+        let pluginResult2 = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["arg0": arg0, "arg1": arg1, "arg2": arg2] )
+        pluginResult2?.keepCallback = true;
+        if let callbackId = self.callbackId {
+            commandDelegate.send(pluginResult2, callbackId: callbackId)
+        }
     }
 
     @objc(func2:)
@@ -52,5 +60,25 @@ class SamplePlugin : CDVPlugin
             return
         }
         return
+    }
+
+    @objc(func3:)
+    func func3(command: CDVInvokedUrlCommand)
+    {
+        NSLog("func3 called")
+        guard let arg0 = command.arguments[0] as? Bool else {
+            NSLog("Parameter invalid")
+            let pluginResult:CDVPluginResult = CDVPluginResult(status:CDVCommandStatus_ERROR, messageAs: "Parameter Invalid")
+            self.commandDelegate.send(pluginResult, callbackId:command.callbackId)
+            return
+        }
+
+        if arg0 {
+            self.callbackId = command.callbackId
+        }else{
+            self.callbackId = nil
+            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "OK" )
+            commandDelegate.send(pluginResult, callbackId: command.callbackId)
+        }
     }
 }
