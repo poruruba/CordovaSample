@@ -24,7 +24,7 @@ class SamplePlugin : CDVPlugin
         commandDelegate.send(pluginResult, callbackId: command.callbackId)
 
         let pluginResult2 = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: ["arg0": arg0, "arg1": arg1, "arg2": arg2] )
-        pluginResult2?.keepCallback = true;
+        pluginResult2?.keepCallback = true
         if let callbackId = self.callbackId {
             commandDelegate.send(pluginResult2, callbackId: callbackId)
         }
